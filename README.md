@@ -15,6 +15,8 @@ npm i
 npm run dev
 ```
 
+Swagger available at http://localhost:3000/api/_ui
+
 ## Frontend
 
 First, start the backend server (it's required to fetch the OpenApi spec)
@@ -33,3 +35,5 @@ Run (in dev mode)
 ```
 npm run dev
 ```
+
+Browse http://localhost:5173
