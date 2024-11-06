@@ -29,8 +29,12 @@ function openForm() {
   isVisibleForm.value = true;
 }
 
-function afterSubmit() {
+function closeForm() {
   isVisibleForm.value = false;
+}
+
+function afterSubmit() {
+  closeForm();
   fetchFeedback();
 }
 </script>
@@ -44,8 +48,24 @@ function afterSubmit() {
       <ReportView :report="selectedReport" />
     </div>
 
-    <FeedbackForm v-if="isVisibleForm" @submitted="afterSubmit" />
+    <transition name="fade">
+      <FeedbackForm
+        v-if="isVisibleForm"
+        @submitted="afterSubmit"
+        @close="closeForm"
+      />
+    </transition>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
