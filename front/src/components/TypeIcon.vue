@@ -6,7 +6,6 @@ const props = defineProps<{
   big?: boolean;
 }>();
 const size = props.big ? 24 : 16;
-console.log(props.type);
 </script>
 
 <template>
