@@ -20,7 +20,7 @@ const data = reactive<ReportInsert>({
 
 async function submitReport() {
   if (isLoading.value) return;
-  await FeedbackService.createReport(data)
+  await FeedbackService.createReport({ requestBody: data })
     .then((data) => emit("submitted", data?._id))
     .catch(() => {
       hasError.value = true;
