@@ -17,11 +17,14 @@ export const reportSchema = z
     message: z.string().openapi({
       example: "Found a bug in this page",
     }),
+    date: z.date().openapi({
+      example: "2021-09-01T00:00:00.000Z",
+    }),
   })
   .openapi("Report");
 
 export const reportSchemaInsert = reportSchema
-  .omit({ _id: true })
+  .omit({ _id: true, date: true })
   .openapi("ReportInsert");
 
 export type Report = z.infer<typeof reportSchema>;

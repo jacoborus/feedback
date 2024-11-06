@@ -22,7 +22,10 @@ export async function list(opts?: ListOptions): Promise<Report[]> {
 export async function create(payload: ReportInsert): Promise<Report> {
   let id: ObjectId;
   try {
-    const result = await reportsCollection.insertOne(payload);
+    const result = await reportsCollection.insertOne({
+      ...payload,
+      date: new Date(),
+    });
     id = result.insertedId;
   } catch (error) {
     console.error(error);

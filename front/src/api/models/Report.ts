@@ -9,5 +9,6 @@ export type Report = {
     feedbacktype: 'bug' | 'suggestion';
     title: string;
     message: string;
+    date: string;
 };
 
