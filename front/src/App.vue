@@ -38,6 +38,7 @@ async function afterSubmit(id: string) {
 }
 
 async function removeReport(id: string) {
+  if (!window.confirm("Are you sure you want to remove the report?")) return;
   return FeedbackService.removeReport(id).then(() => {
     selectedReport.value = undefined;
     reports.value = reports.value.filter((r) => r._id !== id);

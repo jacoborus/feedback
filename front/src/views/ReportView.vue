@@ -33,12 +33,12 @@ defineEmits<{
 
       <p class="text-slate-800 pl-10">{{ report.message }}</p>
 
-      <!-- <button -->
-      <!--   class="text-slate-800 bg-red-600 px-4 py-1 rounded-md shadow-md mt-10" -->
-      <!--   @click="$emit('remove', report._id)" -->
-      <!-- > -->
-      <!--   Delete -->
-      <!-- </button> -->
+      <button
+        class="text-white bg-red-600 px-3 py-1 rounded-md shadow-md mt-10"
+        @click="$emit('remove', report._id)"
+      >
+        Delete
+      </button>
     </div>
     <h1 v-else>No report selected</h1>
   </div>
