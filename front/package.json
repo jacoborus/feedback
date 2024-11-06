@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean-api": "rm -rf ./src/api",
+    "update-api-spec": "curl http://localhost:3000/api/_docs > apispec.json",
+    "gen:api": "npm run clean-api && openapi --input apispec.json --output ./src/api --useUnionTypes"
   },
   "dependencies": {
     "vue": "^3.5.12"
@@ -14,6 +17,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
+    "openapi-typescript-codegen": "^0.29.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "typescript": "~5.6.2",
