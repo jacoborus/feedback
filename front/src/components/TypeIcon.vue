@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { Lightbulb, CircleAlert } from "lucide-vue-next";
 
-defineProps<{
+const props = defineProps<{
   type: "bug" | "suggestion";
+  big?: boolean;
 }>();
+const size = props.big ? 24 : 16;
+console.log(props.type);
 </script>
 
 <template>
-  <Lightbulb v-if="type === 'bug'" color="orange" :size="24" />
-  <CircleAlert v-else color="red" :size="24" />
+  <CircleAlert v-if="type === 'bug'" color="red" :size="size" />
+  <Lightbulb v-else color="orange" :size="size" />
 </template>

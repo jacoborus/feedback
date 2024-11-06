@@ -15,13 +15,13 @@ defineEmits<{
 
 <template>
   <div
-    class="flex-col flex-grow h-full w-80 border-b-gray-200 border-b-solid border-b-2 max-w-96 bg-slate-100 p-4 overflow-y-scroll"
+    class="flex-col h-full basis-96 border-b-gray-200 border-b-solid border-b-2 bg-slate-100 overflow-y-auto"
   >
     <div
       v-for="report in props.reports"
       @click.prevent="$emit('view', report._id)"
       class="flex border-b-gray-200 border-b-solid border-b-2 rounded-md p-2 cursor-pointer"
-      :class="{ 'bg-slate-300': report._id === props.selectedId }"
+      :class="{ 'bg-slate-200': report._id === props.selectedId }"
     >
       <TypeIcon :type="report.feedbacktype" class="mr-2" />
       <div>
