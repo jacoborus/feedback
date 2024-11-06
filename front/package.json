@@ -12,6 +12,7 @@
     "gen:api": "npm run clean-api && openapi --input apispec.json --output ./src/api --useUnionTypes"
   },
   "dependencies": {
+    "lucide-vue-next": "^0.454.0",
     "vue": "^3.5.12"
   },
   "devDependencies": {
