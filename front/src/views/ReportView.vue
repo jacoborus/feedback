@@ -21,7 +21,7 @@ defineEmits<{
 
       <span class="flex mb-2">
         <TypeIcon :type="report.feedbacktype" big class="mr-2" />
-        <h1 class="text-2xl text-black">{{ report.title }}</h1>
+        <h1 class="text-2xl text-black pl-1">{{ report.title }}</h1>
       </span>
 
       <span class="block text-sm text-gray-500 pl-10 mb-8">
