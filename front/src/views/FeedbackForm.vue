@@ -18,7 +18,7 @@ const data = reactive<ReportInsert>({
 });
 
 async function submitReport() {
-  await FeedbackService.create(data)
+  await FeedbackService.createReport(data)
     .then((data) => emit("submitted", data?._id))
     .catch(() => {
       hasError.value = true;

@@ -14,7 +14,7 @@ defineEmits<{
 
 <template>
   <div
-    class="flex-col flex-grow h-full border-b-gray-200 border-b-solid border-b-2 max-w-96 bg-slate-200 p-4 overflow-y-scroll"
+    class="flex-col flex-grow h-full w-80 border-b-gray-200 border-b-solid border-b-2 max-w-96 bg-slate-100 p-4 overflow-y-scroll"
   >
     <div
       v-for="report in props.reports"

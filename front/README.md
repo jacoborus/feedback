@@ -1,5 +1,35 @@
-# Vue 3 + TypeScript + Vite
+# Feedback
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+**Requirements:**
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+- node.js
+- MongoDB (or docker, use `docker compose up` on the backend folder)
+
+## Backend
+
+Run (in dev mode)
+
+```
+cd back
+npm i
+npm run dev
+```
+
+## Frontend
+
+First, start the backend server (it's required to fetch the OpenApi spec)
+
+Prepare:
+
+```
+cd front
+npm i
+npm run update-api-spec # fetch OpenAPI spec
+npm run gen:api # generate API service
+```
+
+Run (in dev mode)
+
+```
+npm run dev
+```
