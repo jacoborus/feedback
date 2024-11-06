@@ -15,7 +15,7 @@ const isVisibleForm = ref(false);
 fetchFeedback();
 
 async function fetchFeedback() {
-  return FeedbackService.list().then((data) => {
+  return FeedbackService.listReports().then((data) => {
     reports.value = data;
   });
 }
@@ -36,6 +36,13 @@ async function afterSubmit(id: string) {
   closeForm();
   fetchFeedback().then(() => selectReport(id));
 }
+
+async function removeReport(id: string) {
+  return FeedbackService.removeReport(id).then(() => {
+    selectedReport.value = undefined;
+    reports.value = reports.value.filter((r) => r._id !== id);
+  });
+}
 </script>
 
 <template>
@@ -48,7 +55,7 @@ async function afterSubmit(id: string) {
         :selected-id="selectedReport?._id"
         @view="selectReport"
       />
-      <ReportView :report="selectedReport" />
+      <ReportView :report="selectedReport" @remove="removeReport" />
     </div>
 
     <transition name="fade">

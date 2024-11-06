@@ -15,7 +15,7 @@ export class FeedbackService {
      * @returns Report The reports
      * @throws ApiError
      */
-    public static list(
+    public static listReports(
         limit?: number | null,
         skip?: number | null,
     ): CancelablePromise<Array<Report>> {
@@ -40,7 +40,7 @@ export class FeedbackService {
      * @returns any New report
      * @throws ApiError
      */
-    public static create(
+    public static createReport(
         requestBody?: ReportInsert,
     ): CancelablePromise<Report> {
         return __request(OpenAPI, {
@@ -48,6 +48,31 @@ export class FeedbackService {
             url: '/feedback',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                400: `Bad request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                500: `Internal server error`,
+            },
+        });
+    }
+    /**
+     * Delete a report
+     * @param id the id of the task
+     * @returns any Deleted report successfully
+     * @throws ApiError
+     */
+    public static removeReport(
+        id: string,
+    ): CancelablePromise<{
+        id: string;
+    }> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/feedback/{id}',
+            path: {
+                'id': id,
+            },
             errors: {
                 400: `Bad request`,
                 401: `Unauthorized`,

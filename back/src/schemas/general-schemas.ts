@@ -26,3 +26,17 @@ export const listOptions = z.object({
 });
 
 export type ListOptions = z.infer<typeof listOptions>;
+
+export const IdParamSchema = z.object({
+  id: z
+    .string()
+    .min(3)
+    .openapi({
+      param: {
+        name: "id",
+        in: "path",
+        description: "the id of the task",
+      },
+      example: "1212121",
+    }),
+});

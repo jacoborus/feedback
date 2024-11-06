@@ -6,7 +6,6 @@ import type { ListOptions } from "../schemas/general-schemas";
 import { reportsCollection } from "../db";
 
 export async function list(opts?: ListOptions): Promise<Report[]> {
-  console.log({ opts });
   try {
     const reports = await reportsCollection
       .find({})
@@ -34,4 +33,13 @@ export async function create(payload: ReportInsert): Promise<Report> {
     _id: id,
   });
   return report!;
+}
+
+export async function remove(id: string) {
+  try {
+    await reportsCollection.deleteOne({ _id: new ObjectId(id) });
+  } catch (e) {
+    console.error(e);
+    throw new HTTPException(500, { message: "Error removing report" });
+  }
 }

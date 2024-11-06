@@ -3,6 +3,9 @@ import type { Report } from "../api";
 defineProps<{
   report: Report | undefined;
 }>();
+defineEmits<{
+  (e: "remove", id: string): void;
+}>();
 </script>
 
 <template>
@@ -14,6 +17,7 @@ defineProps<{
         >{{ report.name }} ({{ report.email }})</span
       >
       <p class="text-slate-800">{{ report.message }}</p>
+      <button @click="$emit('remove', report._id)">delete</button>
     </div>
     <h1 v-else>No report selected</h1>
   </div>

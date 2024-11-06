@@ -6,6 +6,10 @@ const props = defineProps<{
   reports: Report[];
   selectedId: string | undefined;
 }>();
+
+defineEmits<{
+  (e: "view", id: string): void;
+}>();
 </script>
 
 <template>
