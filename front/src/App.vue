@@ -57,15 +57,14 @@ async function removeReport(id: string) {
       />
       <ReportView :report="selectedReport" @remove="removeReport" />
     </div>
+    <transition name="fade">
+      <FeedbackForm
+        v-if="isVisibleForm"
+        @submitted="afterSubmit"
+        @close="closeForm"
+      />
+    </transition>
   </div>
-
-  <transition name="fade">
-    <FeedbackForm
-      v-if="isVisibleForm"
-      @submitted="afterSubmit"
-      @close="closeForm"
-    />
-  </transition>
 </template>
 
 <style scoped>

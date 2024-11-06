@@ -29,8 +29,10 @@ defineEmits<{
         <div class="w-full">
           <span class="text-xl"> {{ report.title }} </span><br />
           <div class="flex justify-between w-full mt-1 pr-2">
-            <span class="text-xs text-gray-500"> {{ report.name }} </span><br />
-            <span class="text-xs text-gray-500">
+            <span class="text-xs text-gray-500 font-medium">
+              {{ report.name }}
+            </span>
+            <span class="text-xs text-gray-500 font-medium">
               {{ formatDate(report.date) }}
             </span>
           </div>

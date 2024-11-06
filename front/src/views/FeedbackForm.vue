@@ -9,6 +9,7 @@ const emit = defineEmits<{
 }>();
 
 const hasError = ref(false);
+const isLoading = ref(false);
 const data = reactive<ReportInsert>({
   name: "",
   email: "",
@@ -18,6 +19,7 @@ const data = reactive<ReportInsert>({
 });
 
 async function submitReport() {
+  if (isLoading.value) return;
   await FeedbackService.createReport(data)
     .then((data) => emit("submitted", data?._id))
     .catch(() => {
@@ -29,7 +31,7 @@ async function submitReport() {
 <template>
   <div class="fixed flex w-full h-full bg-gray-300 justify-center items-center">
     <form
-      class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md space-y-4"
+      class="w-full sm:w-[32rem] mx-auto p-6 bg-white shadow-md rounded-md space-y-4"
       @submit.prevent="submitReport"
     >
       <h1 class="font-bold">Add new feedback</h1>
@@ -112,14 +114,15 @@ async function submitReport() {
 
       <div class="flex pt-4 justify-end">
         <button
-          class="py-2 px-4 mr-2 bg-gray-200 text-gray-700 font-semibold rounded-sm shadow-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          class="py-2 px-4 mr-2 bg-gray-200 text-gray-700 font-semibold rounded-md shadow-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           @click.prevent="emit('close')"
         >
           Discard
         </button>
         <button
           type="submit"
-          class="py-2 px-4 bg-green-600 text-white font-semibold rounded-sm shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          :disabled="isLoading"
+          class="py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
           Send feedback
         </button>
