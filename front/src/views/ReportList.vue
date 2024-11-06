@@ -1,23 +1,51 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import type { Report } from "../api";
 import TypeIcon from "../components/TypeIcon.vue";
 import { formatDate } from "../util/formatDates";
+
+export type FilterType = "all" | "bug" | "suggestion";
 
 const props = defineProps<{
   reports: Report[];
   selectedId: string | undefined;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "view", id: string): void;
+  (e: "filterType", type: FilterType): void;
 }>();
+
+const filterType = ref<FilterType>("all");
+
+watch(filterType, (value) => {
+  emit("filterType", value);
+});
 </script>
 
 <template>
   <div
     class="flex-col h-full basis-1/2 bg-slate-50 overflow-y-auto border-r max-w-96"
   >
-    <ul class="p-4">
+    <div class="border-b px-6 py-4">
+      <label for="filtertype" class="text-gray-500 text-sm font-medium">
+        Filter
+      </label>
+
+      <select
+        id="filtertype"
+        name="filtertype"
+        v-model="filterType"
+        required
+        class="mt-1 w-32 bg-slate-200 text-gray-600 font-medium rounded-md focus:outline-none sm:text-sm"
+      >
+        <option value="all">All</option>
+        <option value="bug">Bug</option>
+        <option value="suggestion">Suggestion</option>
+      </select>
+    </div>
+
+    <ul class="p-2">
       <li
         v-for="report in props.reports"
         @click.prevent="$emit('view', report._id)"

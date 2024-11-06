@@ -1,5 +1,8 @@
 import { z } from "@hono/zod-openapi";
 
+const feedbackType = z.enum(["bug", "suggestion", "all"]);
+export type FeedbackType = z.infer<typeof feedbackType>;
+
 export const listOptions = z.object({
   limit: z.coerce
     .number()
@@ -12,6 +15,7 @@ export const listOptions = z.object({
       example: 10,
     })
     .optional(),
+
   skip: z.coerce
     .number()
     .openapi({
@@ -21,6 +25,18 @@ export const listOptions = z.object({
         description: "skip amount of items to get",
       },
       example: 20,
+    })
+    .optional(),
+
+  feedbacktype: z
+    .enum(["bug", "suggestion", "all"])
+    .openapi({
+      param: {
+        name: "feedbacktype",
+        in: "query",
+        description: "skip amount of items to get",
+      },
+      example: "bug",
     })
     .optional(),
 });

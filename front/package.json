@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean-api": "rm -rf ./src/api",
     "update-api-spec": "curl http://localhost:3000/api/_docs > apispec.json",
-    "gen:api": "npm run clean-api && openapi --input apispec.json --output ./src/api --useUnionTypes"
+    "gen:api": "npm run clean-api && openapi --useOptions --input apispec.json --output ./src/api --useUnionTypes"
   },
   "dependencies": {
     "lucide-vue-next": "^0.454.0",

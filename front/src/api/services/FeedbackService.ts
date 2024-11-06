@@ -10,21 +10,34 @@ import { request as __request } from '../core/request';
 export class FeedbackService {
     /**
      * List all the reports
-     * @param limit amount of items to get
-     * @param skip skip amount of items to get
      * @returns Report The reports
      * @throws ApiError
      */
-    public static listReports(
+    public static listReports({
+        limit,
+        skip,
+        feedbacktype,
+    }: {
+        /**
+         * amount of items to get
+         */
         limit?: number | null,
+        /**
+         * skip amount of items to get
+         */
         skip?: number | null,
-    ): CancelablePromise<Array<Report>> {
+        /**
+         * skip amount of items to get
+         */
+        feedbacktype?: 'bug' | 'suggestion' | 'all',
+    }): CancelablePromise<Array<Report>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/feedback',
             query: {
                 'limit': limit,
                 'skip': skip,
+                'feedbacktype': feedbacktype,
             },
             errors: {
                 400: `Bad request`,
@@ -36,13 +49,17 @@ export class FeedbackService {
     }
     /**
      * Create one report
-     * @param requestBody a report object
      * @returns any New report
      * @throws ApiError
      */
-    public static createReport(
+    public static createReport({
+        requestBody,
+    }: {
+        /**
+         * a report object
+         */
         requestBody?: ReportInsert,
-    ): CancelablePromise<Report> {
+    }): CancelablePromise<Report> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/feedback',
@@ -58,13 +75,17 @@ export class FeedbackService {
     }
     /**
      * Delete a report
-     * @param id the id of the task
      * @returns any Deleted report successfully
      * @throws ApiError
      */
-    public static removeReport(
+    public static removeReport({
+        id,
+    }: {
+        /**
+         * the id of the task
+         */
         id: string,
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         id: string;
     }> {
         return __request(OpenAPI, {

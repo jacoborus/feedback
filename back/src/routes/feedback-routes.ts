@@ -4,6 +4,7 @@ import { HTTPException } from "hono/http-exception";
 import * as feedbackService from "../services/feedback-service";
 import { reportSchema, reportSchemaInsert } from "../schemas/feedback-schemas";
 import { IdParamSchema } from "../schemas/general-schemas";
+import type { FeedbackType } from "../schemas/general-schemas";
 import { jsonBody, jsonSchema } from "../utils/converters.util";
 import { genericResponses } from "../utils/generic-responses";
 import { listOptions } from "../schemas/general-schemas";
@@ -29,18 +30,24 @@ router.openapi(
   async (c) => {
     let limit: number | undefined;
     let skip: number | undefined;
+    let feedbacktype: FeedbackType | undefined;
     const query = c.req.query();
     try {
       const parsedQuery = listOptions.parse(query);
       limit = parsedQuery.limit;
       skip = parsedQuery.skip;
+      feedbacktype = parsedQuery.feedbacktype;
     } catch (e) {
       console.error(e);
       throw new HTTPException(401, {
         message: "Wrong query retrieving feedback",
       });
     }
-    const reports = await feedbackService.list({ limit, skip });
+    const reports = await feedbackService.list({
+      limit,
+      skip,
+      feedbacktype,
+    });
     return c.json(reports, 200);
   },
 );
@@ -82,9 +89,7 @@ router.openapi(
   }),
   async (c) => {
     const { id } = c.req.valid("param");
-    console.log({ id });
     await feedbackService.remove(id);
-    console.log({ id });
     return c.json({ id }, 200);
   },
 );

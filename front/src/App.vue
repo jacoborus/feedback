@@ -6,6 +6,7 @@ import ReportList from "./views/ReportList.vue";
 import ReportView from "./views/ReportView.vue";
 import { FeedbackService } from "./api";
 import type { Report } from "./api";
+import type { FilterType } from "./views/ReportList.vue";
 
 const reports = ref<Report[]>([]);
 const selectedReport = ref<Report | undefined>();
@@ -14,8 +15,8 @@ const isVisibleForm = ref(false);
 
 fetchFeedback();
 
-async function fetchFeedback() {
-  return FeedbackService.listReports().then((data) => {
+async function fetchFeedback(type?: FilterType) {
+  return FeedbackService.listReports({ feedbacktype: type }).then((data) => {
     reports.value = data;
   });
 }
@@ -37,9 +38,13 @@ async function afterSubmit(id: string) {
   fetchFeedback().then(() => selectReport(id));
 }
 
+async function filterByType(type: FilterType) {
+  await fetchFeedback(type);
+}
+
 async function removeReport(id: string) {
   if (!window.confirm("Are you sure you want to remove the report?")) return;
-  return FeedbackService.removeReport(id).then(() => {
+  return FeedbackService.removeReport({ id }).then(() => {
     selectedReport.value = undefined;
     reports.value = reports.value.filter((r) => r._id !== id);
   });
@@ -55,9 +60,11 @@ async function removeReport(id: string) {
         :reports="reports"
         :selected-id="selectedReport?._id"
         @view="selectReport"
+        @filter-type="filterByType"
       />
       <ReportView :report="selectedReport" @remove="removeReport" />
     </div>
+
     <transition name="fade">
       <FeedbackForm
         v-if="isVisibleForm"
