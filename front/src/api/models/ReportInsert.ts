@@ -6,6 +6,7 @@ export type ReportInsert = {
     name: string;
     email: string;
     feedbackType: 'bug' | 'suggestion';
+    title: string;
     message: string;
 };
 

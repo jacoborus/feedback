@@ -7,6 +7,7 @@ export type Report = {
     name: string;
     email: string;
     feedbackType: 'bug' | 'suggestion';
+    title: string;
     message: string;
 };
 

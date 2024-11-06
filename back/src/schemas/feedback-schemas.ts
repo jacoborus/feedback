@@ -11,6 +11,9 @@ export const reportSchema = z
       example: "johndoe@example.com",
     }),
     feedbackType: z.enum(["bug", "suggestion"]),
+    title: z.string().openapi({
+      example: "Bug in the page",
+    }),
     message: z.string().openapi({
       example: "Found a bug in this page",
     }),
