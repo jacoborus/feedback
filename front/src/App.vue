@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-// import FeedbackForm from "./views/FeedbackForm.vue";
+import FeedbackForm from "./views/FeedbackForm.vue";
 import TheHeader from "./views/TheHeader.vue";
 import ReportList from "./views/ReportList.vue";
 import ReportView from "./views/ReportView.vue";
@@ -13,23 +13,38 @@ FeedbackService.list().then((data) => {
   reports.value = data;
 });
 
-// const isVisibleForm = ref(false);
+const isVisibleForm = ref(false);
+
+function fetchFeedback() {
+  FeedbackService.list().then((data) => {
+    reports.value = data;
+  });
+}
 
 function selectReport(id: string) {
   selectedReport.value = reports.value.find(({ _id }) => _id === id);
 }
+
+function openForm() {
+  isVisibleForm.value = true;
+}
+
+function afterSubmit() {
+  isVisibleForm.value = false;
+  fetchFeedback();
+}
 </script>
 
 <template>
-  <div class="flex-col h-full">
-    <TheHeader />
+  <div class="flex flex-col h-full">
+    <TheHeader @openForm="openForm" />
 
-    <div class="flex-grow">
+    <div class="grow flex">
       <ReportList :reports="reports" @view="selectReport" />
       <ReportView :report="selectedReport" />
     </div>
 
-    <!-- <FeedbackForm v-if="isVisibleForm" /> -->
+    <FeedbackForm v-if="isVisibleForm" @submitted="afterSubmit" />
   </div>
 </template>
 

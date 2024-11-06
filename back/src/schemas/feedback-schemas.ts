@@ -10,7 +10,7 @@ export const reportSchema = z
     email: z.string().email({ message: "Invalid email address" }).openapi({
       example: "johndoe@example.com",
     }),
-    feedbackType: z.enum(["bug", "suggestion"]),
+    feedbacktype: z.enum(["bug", "suggestion"]),
     title: z.string().openapi({
       example: "Bug in the page",
     }),

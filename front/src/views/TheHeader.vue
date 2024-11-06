@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineEmits<{
+  (e: "openForm"): void;
+}>();
+</script>
 
 <template>
   <div
@@ -8,6 +12,7 @@
 
     <button
       class="py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      @click="$emit('openForm')"
     >
       New feedback
     </button>
