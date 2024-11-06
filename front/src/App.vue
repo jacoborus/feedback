@@ -10,18 +10,23 @@ import type { FilterType, SortBy } from "./views/ReportList.vue";
 
 const reports = ref<Report[]>([]);
 const selectedReport = ref<Report | undefined>();
+const isVisibleForm = ref(false);
 const findOptions = {
   feedbacktype: "all" as FilterType,
   sortby: "date" as SortBy,
 };
-const isVisibleForm = ref(false);
 
 fetchFeedback();
 
 async function fetchFeedback() {
-  return FeedbackService.listReports(findOptions).then((data) => {
-    reports.value = data;
-  });
+  return FeedbackService.listReports(findOptions)
+    .then((data) => {
+      reports.value = data;
+    })
+    .catch((e) => {
+      alert("Error fetching feedback, please try again later");
+      console.error(e);
+    });
 }
 
 function selectReport(id: string) {
