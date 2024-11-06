@@ -6,17 +6,20 @@ import ReportList from "./views/ReportList.vue";
 import ReportView from "./views/ReportView.vue";
 import { FeedbackService } from "./api";
 import type { Report } from "./api";
-import type { FilterType } from "./views/ReportList.vue";
+import type { FilterType, SortBy } from "./views/ReportList.vue";
 
 const reports = ref<Report[]>([]);
 const selectedReport = ref<Report | undefined>();
-
+const findOptions = {
+  feedbacktype: "all" as FilterType,
+  sortby: "date" as SortBy,
+};
 const isVisibleForm = ref(false);
 
 fetchFeedback();
 
-async function fetchFeedback(type?: FilterType) {
-  return FeedbackService.listReports({ feedbacktype: type }).then((data) => {
+async function fetchFeedback() {
+  return FeedbackService.listReports(findOptions).then((data) => {
     reports.value = data;
   });
 }
@@ -39,7 +42,13 @@ async function afterSubmit(id: string) {
 }
 
 async function filterByType(type: FilterType) {
-  await fetchFeedback(type);
+  findOptions.feedbacktype = type;
+  await fetchFeedback();
+}
+
+async function sortBy(field: SortBy) {
+  findOptions.sortby = field;
+  await fetchFeedback();
 }
 
 async function removeReport(id: string) {
@@ -61,6 +70,7 @@ async function removeReport(id: string) {
         :selected-id="selectedReport?._id"
         @view="selectReport"
         @filter-type="filterByType"
+        @sort-by="sortBy"
       />
       <ReportView :report="selectedReport" @remove="removeReport" />
     </div>

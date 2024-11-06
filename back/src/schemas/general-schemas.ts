@@ -3,6 +3,9 @@ import { z } from "@hono/zod-openapi";
 const feedbackType = z.enum(["bug", "suggestion", "all"]);
 export type FeedbackType = z.infer<typeof feedbackType>;
 
+const sortBy = z.enum(["date", "name"]);
+export type SortBy = z.infer<typeof sortBy>;
+
 export const listOptions = z.object({
   limit: z.coerce
     .number()
@@ -34,9 +37,21 @@ export const listOptions = z.object({
       param: {
         name: "feedbacktype",
         in: "query",
-        description: "skip amount of items to get",
+        description: "Filter by feedback type",
       },
       example: "bug",
+    })
+    .optional(),
+
+  sortby: z
+    .enum(["date", "name"])
+    .openapi({
+      param: {
+        name: "sortby",
+        in: "query",
+        description: "Sort by date or name",
+      },
+      example: "name",
     })
     .optional(),
 });

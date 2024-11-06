@@ -4,7 +4,7 @@ import { HTTPException } from "hono/http-exception";
 import * as feedbackService from "../services/feedback-service";
 import { reportSchema, reportSchemaInsert } from "../schemas/feedback-schemas";
 import { IdParamSchema } from "../schemas/general-schemas";
-import type { FeedbackType } from "../schemas/general-schemas";
+import type { FeedbackType, SortBy } from "../schemas/general-schemas";
 import { jsonBody, jsonSchema } from "../utils/converters.util";
 import { genericResponses } from "../utils/generic-responses";
 import { listOptions } from "../schemas/general-schemas";
@@ -31,12 +31,14 @@ router.openapi(
     let limit: number | undefined;
     let skip: number | undefined;
     let feedbacktype: FeedbackType | undefined;
+    let sortby: SortBy | undefined;
     const query = c.req.query();
     try {
       const parsedQuery = listOptions.parse(query);
       limit = parsedQuery.limit;
       skip = parsedQuery.skip;
       feedbacktype = parsedQuery.feedbacktype;
+      sortby = parsedQuery.sortby;
     } catch (e) {
       console.error(e);
       throw new HTTPException(401, {
@@ -47,6 +49,7 @@ router.openapi(
       limit,
       skip,
       feedbacktype,
+      sortby,
     });
     return c.json(reports, 200);
   },

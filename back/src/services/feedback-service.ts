@@ -6,14 +6,16 @@ import type { ListOptions } from "../schemas/general-schemas";
 import { reportsCollection } from "../db";
 
 export async function list(opts?: ListOptions): Promise<Report[]> {
-  let findQuery = {};
+  let findQuery: ListOptions = {};
   if (opts?.feedbacktype && opts.feedbacktype !== "all") {
-    findQuery = { feedbacktype: opts.feedbacktype };
+    findQuery.feedbacktype = opts.feedbacktype;
   }
 
   try {
     const reports = await reportsCollection
       .find(findQuery)
+      .collation({ locale: "en", strength: 1 })
+      .sort(opts?.sortby || "date", 1)
       .skip(opts?.skip || 0)
       .limit(opts?.limit || 0)
       .toArray();

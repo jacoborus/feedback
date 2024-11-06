@@ -17,6 +17,7 @@ export class FeedbackService {
         limit,
         skip,
         feedbacktype,
+        sortby,
     }: {
         /**
          * amount of items to get
@@ -27,9 +28,13 @@ export class FeedbackService {
          */
         skip?: number | null,
         /**
-         * skip amount of items to get
+         * Filter by feedback type
          */
         feedbacktype?: 'bug' | 'suggestion' | 'all',
+        /**
+         * Sort by date or name
+         */
+        sortby?: 'date' | 'name',
     }): CancelablePromise<Array<Report>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -38,6 +43,7 @@ export class FeedbackService {
                 'limit': limit,
                 'skip': skip,
                 'feedbacktype': feedbacktype,
+                'sortby': sortby,
             },
             errors: {
                 400: `Bad request`,
