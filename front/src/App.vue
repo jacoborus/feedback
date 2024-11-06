@@ -9,11 +9,14 @@ import type { Report } from "./api";
 import type { FilterType, SortBy } from "./views/ReportList.vue";
 
 const reports = ref<Report[]>([]);
-const selectedReport = ref<Report | undefined>();
+const selectedReport = ref<string | undefined>();
 const isVisibleForm = ref(false);
+const amountItems = ref(0);
+
 const findOptions = {
   feedbacktype: "all" as FilterType,
   sortby: "date" as SortBy,
+  page: 1,
 };
 
 fetchFeedback();
@@ -21,7 +24,8 @@ fetchFeedback();
 async function fetchFeedback() {
   return FeedbackService.listReports(findOptions)
     .then((data) => {
-      reports.value = data;
+      reports.value = data.items;
+      amountItems.value = data.total;
     })
     .catch((e) => {
       alert("Error fetching feedback, please try again later");
@@ -30,7 +34,7 @@ async function fetchFeedback() {
 }
 
 function selectReport(id: string) {
-  selectedReport.value = reports.value.find(({ _id }) => _id === id);
+  selectedReport.value = id;
 }
 
 function openForm() {
@@ -48,11 +52,13 @@ async function afterSubmit(id: string) {
 
 async function filterByType(type: FilterType) {
   findOptions.feedbacktype = type;
+  findOptions.page = 1;
   await fetchFeedback();
 }
 
 async function sortBy(field: SortBy) {
   findOptions.sortby = field;
+  findOptions.page = 1;
   await fetchFeedback();
 }
 
@@ -63,6 +69,16 @@ async function removeReport(id: string) {
     reports.value = reports.value.filter((r) => r._id !== id);
   });
 }
+
+function prevPage() {
+  findOptions.page -= 1;
+  fetchFeedback();
+}
+
+function nextPage() {
+  findOptions.page += 1;
+  fetchFeedback();
+}
 </script>
 
 <template>
@@ -72,12 +88,16 @@ async function removeReport(id: string) {
     <div class="grow flex">
       <ReportList
         :reports="reports"
-        :selected-id="selectedReport?._id"
+        :selected-id="selectedReport"
+        :total="amountItems"
+        :page="findOptions.page"
         @view="selectReport"
         @filter-type="filterByType"
         @sort-by="sortBy"
+        @prev-page="prevPage"
+        @next-page="nextPage"
       />
-      <ReportView :report="selectedReport" @remove="removeReport" />
+      <ReportView :id="selectedReport" @remove="removeReport" />
     </div>
 
     <transition name="fade">

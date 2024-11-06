@@ -10,23 +10,18 @@ import { request as __request } from '../core/request';
 export class FeedbackService {
     /**
      * List all the reports
-     * @returns Report The reports
+     * @returns any The reports
      * @throws ApiError
      */
     public static listReports({
-        limit,
-        skip,
-        feedbacktype,
-        sortby,
+        page = 1,
+        feedbacktype = 'all',
+        sortby = 'date',
     }: {
         /**
-         * amount of items to get
+         * page of items to get
          */
-        limit?: number | null,
-        /**
-         * skip amount of items to get
-         */
-        skip?: number | null,
+        page?: number,
         /**
          * Filter by feedback type
          */
@@ -35,13 +30,16 @@ export class FeedbackService {
          * Sort by date or name
          */
         sortby?: 'date' | 'name',
-    }): CancelablePromise<Array<Report>> {
+    }): CancelablePromise<{
+        items: Array<Report>;
+        total: number;
+        page: number;
+    }> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/feedback',
             query: {
-                'limit': limit,
-                'skip': skip,
+                'page': page,
                 'feedbacktype': feedbacktype,
                 'sortby': sortby,
             },
@@ -71,6 +69,33 @@ export class FeedbackService {
             url: '/feedback',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                400: `Bad request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                500: `Internal server error`,
+            },
+        });
+    }
+    /**
+     * Get a report
+     * @returns Report A report
+     * @throws ApiError
+     */
+    public static getReport({
+        id,
+    }: {
+        /**
+         * the id of the task
+         */
+        id: string,
+    }): CancelablePromise<Report> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/feedback/{id}',
+            path: {
+                'id': id,
+            },
             errors: {
                 400: `Bad request`,
                 401: `Unauthorized`,

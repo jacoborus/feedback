@@ -1,21 +1,36 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import type { Report } from "../api";
 import TypeIcon from "../components/TypeIcon.vue";
 import { formatDate } from "../util/formatDates";
+import { FeedbackService } from "../api";
 
-defineProps<{
-  report: Report | undefined;
+const props = defineProps<{
+  id: string | undefined;
 }>();
 
 defineEmits<{
   (e: "remove", id: string): void;
 }>();
+
+const report = ref<Report>();
+const isLoading = ref(false);
+
+watch(() => props.id, fetchReport, { immediate: true });
+
+async function fetchReport() {
+  if (props.id) {
+    isLoading.value = true;
+    report.value = await FeedbackService.getReport({ id: props.id });
+    isLoading.value = false;
+  }
+}
 </script>
 
 <template>
   <div class="flex w-full h-full justify-center pt-10">
     <div
-      v-if="report"
+      v-if="report && !isLoading"
       class="p-8 w-full sm:w-full md:w-full lg:w-2/3 2xl:w-1/2"
     >
       <span class="block pl-10 text-sm text-gray-500">
@@ -40,6 +55,6 @@ defineEmits<{
         Delete
       </button>
     </div>
-    <h1 v-else>No report selected</h1>
+    <h1 v-if="!report">No report selected</h1>
   </div>
 </template>

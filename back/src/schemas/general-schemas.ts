@@ -7,32 +7,23 @@ const sortBy = z.enum(["date", "name"]);
 export type SortBy = z.infer<typeof sortBy>;
 
 export const listOptions = z.object({
-  limit: z.coerce
+  page: z.coerce
     .number()
+    .positive()
+    .default(1)
     .openapi({
       param: {
-        name: "limit",
+        name: "page",
         in: "query",
-        description: "amount of items to get",
+        description: "page of items to get",
       },
-      example: 10,
-    })
-    .optional(),
-
-  skip: z.coerce
-    .number()
-    .openapi({
-      param: {
-        name: "skip",
-        in: "query",
-        description: "skip amount of items to get",
-      },
-      example: 20,
+      example: 2,
     })
     .optional(),
 
   feedbacktype: z
     .enum(["bug", "suggestion", "all"])
+    .default("all")
     .openapi({
       param: {
         name: "feedbacktype",
@@ -45,6 +36,7 @@ export const listOptions = z.object({
 
   sortby: z
     .enum(["date", "name"])
+    .default("date")
     .openapi({
       param: {
         name: "sortby",

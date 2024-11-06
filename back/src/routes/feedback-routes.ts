@@ -22,21 +22,27 @@ router.openapi(
       query: listOptions,
     },
     responses: {
-      200: jsonSchema(z.array(reportSchema), "The reports"),
+      200: jsonSchema(
+        z.object({
+          items: z.array(reportSchema),
+          total: z.number(),
+          page: z.number(),
+        }),
+        "The reports",
+      ),
       ...genericResponses,
     },
     tags: ["Feedback"],
   }),
   async (c) => {
-    let limit: number | undefined;
-    let skip: number | undefined;
+    let page = 1;
     let feedbacktype: FeedbackType | undefined;
     let sortby: SortBy | undefined;
     const query = c.req.query();
+
     try {
       const parsedQuery = listOptions.parse(query);
-      limit = parsedQuery.limit;
-      skip = parsedQuery.skip;
+      page = parsedQuery.page || 1;
       feedbacktype = parsedQuery.feedbacktype;
       sortby = parsedQuery.sortby;
     } catch (e) {
@@ -45,13 +51,35 @@ router.openapi(
         message: "Wrong query retrieving feedback",
       });
     }
-    const reports = await feedbackService.list({
-      limit,
-      skip,
+
+    const result = await feedbackService.list({
+      page,
       feedbacktype,
       sortby,
     });
-    return c.json(reports, 200);
+
+    return c.json(result, 200);
+  },
+);
+
+// GET /{id}
+router.openapi(
+  createRoute({
+    operationId: "getReport",
+    summary: "Get a report",
+    method: "get",
+    path: "/{id}",
+    tags: ["Feedback"],
+    request: { params: IdParamSchema },
+    responses: {
+      200: jsonSchema(reportSchema, "A report"),
+      ...genericResponses,
+    },
+  }),
+  async (c) => {
+    const { id } = c.req.valid("param");
+    const report = await feedbackService.getById(id);
+    return c.json(report, 200);
   },
 );
 
