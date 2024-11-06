@@ -9,14 +9,13 @@ import type { Report } from "./api";
 
 const reports = ref<Report[]>([]);
 const selectedReport = ref<Report | undefined>();
-FeedbackService.list().then((data) => {
-  reports.value = data;
-});
 
 const isVisibleForm = ref(false);
 
-function fetchFeedback() {
-  FeedbackService.list().then((data) => {
+fetchFeedback();
+
+async function fetchFeedback() {
+  return FeedbackService.list().then((data) => {
     reports.value = data;
   });
 }
@@ -33,9 +32,9 @@ function closeForm() {
   isVisibleForm.value = false;
 }
 
-function afterSubmit() {
+async function afterSubmit(id: string) {
   closeForm();
-  fetchFeedback();
+  fetchFeedback().then(() => selectReport(id));
 }
 </script>
 
@@ -44,7 +43,11 @@ function afterSubmit() {
     <TheHeader @openForm="openForm" />
 
     <div class="grow flex">
-      <ReportList :reports="reports" @view="selectReport" />
+      <ReportList
+        :reports="reports"
+        :selected-id="selectedReport?._id"
+        @view="selectReport"
+      />
       <ReportView :report="selectedReport" />
     </div>
 

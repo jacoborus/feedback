@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { FeedbackService } from "../api";
 import type { ReportInsert } from "../api";
 
 const emit = defineEmits<{
-  (e: "submitted"): void;
+  (e: "submitted", id: string): void;
   (e: "close"): void;
 }>();
 
+const hasError = ref(false);
 const data = reactive<ReportInsert>({
   name: "",
   email: "",
@@ -17,13 +18,16 @@ const data = reactive<ReportInsert>({
 });
 
 async function submitReport() {
-  console.log(data);
-  await FeedbackService.create(data).then(() => emit("submitted"));
+  await FeedbackService.create(data)
+    .then((data) => emit("submitted", data?._id))
+    .catch(() => {
+      hasError.value = true;
+    });
 }
 </script>
 
 <template>
-  <div class="fixed w-full h-full bg-gray-300">
+  <div class="fixed flex w-full h-full bg-gray-300 justify-center items-center">
     <form
       class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md space-y-4"
       @submit.prevent="submitReport"
@@ -39,7 +43,7 @@ async function submitReport() {
           name="name"
           v-model="data.name"
           required
-          class="mt-1 block w-72 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          class="mt-1 block w-72 px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
 
@@ -53,7 +57,7 @@ async function submitReport() {
           name="email"
           required
           v-model="data.email"
-          class="mt-1 block w-72 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          class="mt-1 block w-72 px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
 
@@ -69,7 +73,7 @@ async function submitReport() {
           name="feedbacktype"
           v-model="data.feedbacktype"
           required
-          class="mt-1 block w-72 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          class="mt-1 block w-72 px-3 py-2 border border-gray-300 bg-white rounded-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
           <option value="bug">Bug</option>
           <option value="suggestion">Suggestion</option>
@@ -86,7 +90,7 @@ async function submitReport() {
           name="title"
           required
           v-model="data.title"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
 
@@ -100,25 +104,26 @@ async function submitReport() {
           rows="4"
           required
           v-model="data.message"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         ></textarea>
       </div>
 
-      <div class="pt-4">
+      <p v-if="hasError" class="text-red-700">Error, please try again later</p>
+
+      <div class="flex pt-4 justify-end">
+        <button
+          class="py-2 px-4 mr-2 bg-gray-200 text-gray-700 font-semibold rounded-sm shadow-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          @click.prevent="emit('close')"
+        >
+          Discard
+        </button>
         <button
           type="submit"
-          class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="py-2 px-4 bg-green-600 text-white font-semibold rounded-sm shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
-          Submit
+          Send feedback
         </button>
       </div>
     </form>
-    <button
-      type="submit"
-      class="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-      @click="emit('close')"
-    >
-      Cancel
-    </button>
   </div>
 </template>
