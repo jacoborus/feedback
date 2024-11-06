@@ -33,35 +33,41 @@ watch(sortBy, (value) => {
   <div
     class="flex-col h-full basis-1/2 bg-slate-50 overflow-y-auto border-r max-w-96 min-w-80"
   >
-    <div class="border-b px-6 py-4">
-      <label for="filtertype" class="text-gray-500 text-sm font-medium">
-        Filter
-      </label>
+    <div class="border-b px-6 py-4 flex justify-between">
+      <div>
+        <label for="filtertype" class="text-gray-500 text-sm font-medium">
+          Filter
+        </label>
 
-      <select
-        id="filtertype"
-        name="filtertype"
-        v-model="filterType"
-        class="mt-1 w-32 bg-slate-200 text-gray-600 font-medium rounded-md focus:outline-none sm:text-sm"
-      >
-        <option value="all">All</option>
-        <option value="bug">Bug</option>
-        <option value="suggestion">Suggestion</option>
-      </select>
-      <label for="sortby" class="text-gray-500 text-sm font-medium">
-        Sort
-      </label>
+        <select
+          id="filtertype"
+          name="filtertype"
+          v-model="filterType"
+          class="mt-1 w-32 bg-slate-200 text-gray-600 font-medium rounded-md focus:outline-none sm:text-sm"
+        >
+          <option value="all">All</option>
+          <option value="bug">Bug</option>
+          <option value="suggestion">Suggestion</option>
+        </select>
+      </div>
 
-      <select
-        id="sortby"
-        name="sortby"
-        v-model="sortBy"
-        class="mt-1 w-32 bg-slate-200 text-gray-600 font-medium rounded-md focus:outline-none sm:text-sm"
-      >
-        <option value="date">Date</option>
-        <option value="name">Name</option>
-      </select>
+      <div>
+        <label for="sortby" class="text-gray-500 text-sm font-medium">
+          Sort
+        </label>
+
+        <select
+          id="sortby"
+          name="sortby"
+          v-model="sortBy"
+          class="mt-1 w-18 bg-slate-200 text-gray-600 font-medium rounded-md focus:outline-none sm:text-sm"
+        >
+          <option value="date">Date</option>
+          <option value="name">Name</option>
+        </select>
+      </div>
     </div>
+
     <ul class="p-2">
       <li
         v-for="report in props.reports"
@@ -72,7 +78,7 @@ watch(sortBy, (value) => {
         <TypeIcon :type="report.feedbacktype" class="mr-2 mt-1" />
 
         <div class="w-full">
-          <span class="text-xl"> {{ report.title }} </span><br />
+          <span class="text-base"> {{ report.title }} </span><br />
           <div class="flex justify-between w-full mt-1 pr-2">
             <span class="text-xs text-gray-500 font-medium">
               {{ report.name }}

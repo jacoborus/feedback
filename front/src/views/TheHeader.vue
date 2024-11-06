@@ -11,7 +11,7 @@ defineEmits<{
     <img src="../assets/logo.svg" alt="the logo" />
 
     <button
-      class="block py-1 px-4 bg-emerald-400 text-white text-lg font-semibold rounded-md shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+      class="px-4 h-12 bg-emerald-400 text-white text-sm font-bold rounded-md shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
       @click="$emit('openForm')"
     >
       New feedback
