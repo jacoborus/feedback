@@ -6,7 +6,7 @@ defineEmits<{
 
 <template>
   <div
-    class="bg-slate-100 flex justify-between p-8 border-b-gray-200 border-solid border-2"
+    class="bg-slate-50 flex justify-between p-8 border-b-slate-200 border-solid border-b"
   >
     <img src="../assets/logo.svg" alt="the logo" />
 
