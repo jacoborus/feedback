@@ -23,6 +23,8 @@ async function fetchReport() {
     isLoading.value = true;
     report.value = await FeedbackService.getReport({ id: props.id });
     isLoading.value = false;
+  } else {
+    report.value = undefined;
   }
 }
 </script>
